@@ -1,10 +1,10 @@
 <p align="center">
-  <img src="docs/logo.png" alt="Story Clock logo" width="104">
+  <img src="docs/logo.png" alt="Story Circle logo" width="104">
 </p>
 
-# Story Clock
+# Story Circle
 
-**Circle Map for Obsidian** — map your story's themes and *setup → payoff* threads onto a two-ring **story clock**, link every segment to a note, and open notes in a side panel.
+**Circle Map for Obsidian** — map your story's themes and *setup → payoff* threads onto a two-ring **story circle**, link every segment to a note, and open notes in a side panel.
 
 A visual screenwriting / plotting tool that lives inside your vault, so your story structure sits right next to your notes.
 

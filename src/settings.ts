@@ -13,7 +13,7 @@ export interface StoryClockSettings {
 }
 
 export const DEFAULT_SETTINGS: StoryClockSettings = {
-  noteFolder: 'Story Clock',
+  noteFolder: 'Story Circle',
   openBehavior: 'side',
 };
 
@@ -52,7 +52,7 @@ export class StoryClockSettingTab extends PluginSettingTab {
         control: {
           type: 'text',
           key: 'noteFolder',
-          placeholder: 'Story Clock',
+          placeholder: 'Story Circle',
           defaultValue: DEFAULT_SETTINGS.noteFolder,
         },
       },
@@ -71,8 +71,8 @@ export class StoryClockSettingTab extends PluginSettingTab {
         },
       },
       {
-        name: 'Support Story Clock',
-        desc: 'If Story Clock helps your writing or plotting workflow, consider buying the author a coffee.',
+        name: 'Support Story Circle',
+        desc: 'If Story Circle helps your writing or plotting workflow, consider buying the author a coffee.',
         render: (setting) => {
           setting.addButton((btn) =>
             btn
