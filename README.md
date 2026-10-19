@@ -15,7 +15,11 @@ A visual screenwriting / plotting tool that lives inside your vault, so your sto
 </p>
 
 <p align="center">
-  <img src="docs/screenshot-editor.png" alt="Story Clock editor" width="100%">
+  <img src="docs/screenshot-obsidian-live.png" alt="Story Clock running live inside Obsidian side-by-side with a linked scene note" width="100%">
+</p>
+
+<p align="center">
+  <img src="docs/screenshot-editor.png" alt="Story Clock dark theme with segment focus highlight and bottom segments tray" width="100%">
 </p>
 
 ---
