@@ -5,6 +5,9 @@ on:
     tags:
       - "*"
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -24,15 +27,14 @@ jobs:
           mkdir story-clock
           cp main.js manifest.json styles.css story-clock/
           zip -r story-clock.zip story-clock/
-          echo "tag_name=$(git tag --sort version:refname | tail -n 1)" >> "$GITHUB_OUTPUT"
 
       - name: Create Release
         uses: ncipollo/release-action@v1
         with:
           artifacts: "main.js,manifest.json,styles.css,story-clock.zip"
-          tag: ${{ steps.build.outputs.tag_name }}
-          name: ${{ steps.build.outputs.tag_name }}
-          body: ${{ steps.build.outputs.tag_name }}
+          tag: ${{ github.ref_name }}
+          name: ${{ github.ref_name }}
+          body: "Release ${{ github.ref_name }}"
           draft: false
           allowUpdates: true
           token: ${{ secrets.GITHUB_TOKEN }}
