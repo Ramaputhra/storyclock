@@ -138,7 +138,7 @@ export class StoryClockView extends ItemView {
     return VIEW_TYPE;
   }
   getDisplayText(): string {
-    return 'Story circle';
+    return 'Story clock';
   }
   getIcon(): string {
     return 'timer';
@@ -230,7 +230,7 @@ export class StoryClockView extends ItemView {
     container.appendChild(root);
 
     const topHead = el('div', { style: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px', marginBottom: '4px' } });
-    topHead.appendChild(el('h2', { style: { margin: '0' } }, ['Story Circle']));
+    topHead.appendChild(el('h2', { style: { margin: '0' } }, ['Story Clock']));
     topHead.appendChild(
       el('button', {
         class: 'story-clock-btn',

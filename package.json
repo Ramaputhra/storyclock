@@ -1,7 +1,7 @@
 {
   "name": "obsidian-story-clock",
-  "version": "1.0.2",
-  "description": "Story Circle for Obsidian. Map themes and setup/payoff threads on a two-ring story circle, link each segment to a note, and open notes in a side panel.",
+  "version": "1.0.3",
+  "description": "Story Clock for Obsidian. Map themes and setup/payoff threads on a two-ring story clock, link each segment to a note, and open notes in a side panel.",
   "main": "main.js",
   "scripts": {
     "dev": "node esbuild.config.mjs",
