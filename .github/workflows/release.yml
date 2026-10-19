@@ -1,0 +1,38 @@
+name: Release Obsidian plugin
+
+on:
+  push:
+    tags:
+      - "*"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.x"
+
+      - name: Build
+        id: build
+        run: |
+          npm install
+          npm run build
+          mkdir story-clock
+          cp main.js manifest.json styles.css story-clock/
+          zip -r story-clock.zip story-clock/
+          echo "tag_name=$(git tag --sort version:refname | tail -n 1)" >> "$GITHUB_OUTPUT"
+
+      - name: Create Release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "main.js,manifest.json,styles.css,story-clock.zip"
+          tag: ${{ steps.build.outputs.tag_name }}
+          name: ${{ steps.build.outputs.tag_name }}
+          body: ${{ steps.build.outputs.tag_name }}
+          draft: false
+          allowUpdates: true
+          token: ${{ secrets.GITHUB_TOKEN }}

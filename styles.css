@@ -1,0 +1,233 @@
+/* Story Clock — plugin styles */
+
+.story-clock-view {
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: var(--background-primary);
+  color: var(--text-normal);
+}
+
+.story-clock-view * {
+  box-sizing: border-box;
+}
+
+.story-clock-map {
+  cursor: crosshair;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.story-clock-btn {
+  cursor: pointer;
+  border: 1px solid var(--background-modifier-border);
+  background: var(--background-secondary);
+  color: var(--text-normal);
+  border-radius: 6px;
+  padding: 5px 10px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.2;
+  transition: background 0.12s, border-color 0.12s, opacity 0.12s;
+}
+.story-clock-btn:hover {
+  background: var(--background-modifier-hover);
+}
+.story-clock-btn.primary {
+  background: var(--interactive-accent);
+  color: var(--text-on-accent);
+  border-color: var(--interactive-accent);
+  font-weight: 600;
+}
+.story-clock-btn.primary:hover {
+  filter: brightness(1.08);
+}
+.story-clock-btn.secondary-accent {
+  background: transparent;
+  color: var(--interactive-accent);
+  border-color: var(--interactive-accent);
+  font-weight: 600;
+}
+.story-clock-btn.secondary-accent:hover {
+  background: var(--background-modifier-hover);
+}
+.story-clock-btn.active {
+  background: var(--interactive-accent);
+  color: var(--text-on-accent);
+  border-color: var(--interactive-accent);
+}
+.story-clock-btn.danger {
+  color: var(--text-error);
+}
+
+.story-clock-input,
+.story-clock-textarea {
+  width: 100%;
+  border: 1px solid var(--background-modifier-border);
+  background: var(--background-primary);
+  color: var(--text-normal);
+  border-radius: 6px;
+  padding: 6px 8px;
+  font-size: 12px;
+}
+.story-clock-input:focus,
+.story-clock-textarea:focus {
+  outline: none;
+  border-color: var(--interactive-accent);
+}
+.story-clock-textarea {
+  resize: vertical;
+  min-height: 52px;
+}
+
+.story-clock-label {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  margin: 10px 0 4px;
+}
+
+.story-clock-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.story-clock-swatch {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: transform 0.1s ease, border-color 0.1s ease;
+  flex-shrink: 0;
+}
+.story-clock-swatch:hover {
+  transform: scale(1.12);
+}
+.story-clock-swatch.selected {
+  border-color: var(--text-normal);
+  box-shadow: 0 0 0 2px var(--interactive-accent);
+}
+
+/* Authentic compact circular color picker wheel at the end of the swatches */
+.story-clock-color-picker {
+  position: relative;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  padding: 2px;
+  background: conic-gradient(
+    #ef4444,
+    #f97316,
+    #eab308,
+    #22c55e,
+    #06b6d4,
+    #3b82f6,
+    #8b5cf6,
+    #ec4899,
+    #ef4444
+  );
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+.story-clock-color-picker:hover {
+  transform: scale(1.12);
+}
+.story-clock-color-picker.selected {
+  box-shadow: 0 0 0 2px var(--text-normal), 0 0 0 4px var(--interactive-accent);
+}
+.story-clock-color-picker-inner {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: var(--background-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-normal);
+  pointer-events: none;
+  border: 1px solid rgba(0, 0, 0, 0.25);
+}
+.story-clock-color-picker input[type='color'] {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Bottom segments tray below the Story Clock visualization */
+.story-clock-tray {
+  border-top: 1px solid var(--background-modifier-border);
+  background: var(--background-secondary);
+  padding: 8px 12px 10px;
+  max-height: 165px;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.story-clock-tray-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+  flex-wrap: wrap;
+}
+
+.story-clock-tray-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.story-clock-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 9px;
+  border-radius: 999px;
+  border: 1px solid var(--background-modifier-border);
+  background: var(--background-primary);
+  font-size: 11.5px;
+  cursor: pointer;
+  max-width: 240px;
+  transition: opacity 0.15s ease, border-color 0.15s ease, transform 0.1s ease, background 0.15s ease;
+}
+.story-clock-chip:hover {
+  border-color: var(--interactive-accent);
+  transform: translateY(-1px);
+}
+.story-clock-chip.selected {
+  border-color: var(--text-normal);
+  box-shadow: 0 0 0 1.5px var(--interactive-accent);
+  font-weight: 600;
+}
+.story-clock-chip.dimmed {
+  opacity: 0.42;
+  filter: grayscale(65%);
+}
+.story-clock-chip.dimmed:hover {
+  opacity: 0.85;
+  filter: none;
+}
+.story-clock-chip.creating {
+  border-style: dashed;
+  border-color: var(--interactive-accent);
+  background: var(--background-secondary-alt);
+}

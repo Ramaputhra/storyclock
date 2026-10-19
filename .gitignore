@@ -1,0 +1,16 @@
+# vscode
+.vscode
+
+# Intellij
+*.iml
+.idea
+
+# npm
+node_modules
+
+# build / temp
+*.log
+.DS_Store
+
+# NOTE: main.js and styles.css are intentionally committed so the plugin can be
+# installed directly from the repo (BRAT) and reviewed for the community store.

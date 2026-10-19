@@ -1,0 +1,11 @@
+{
+  "id": "story-clock",
+  "name": "Story Clock",
+  "version": "1.0.0",
+  "minAppVersion": "1.4.0",
+  "description": "Map themes and setup/payoff threads on a two-ring story clock, link every segment to a note, and open notes in a side panel.",
+  "author": "Ramaputhra / Amplititude",
+  "authorUrl": "https://buymeacoffee.com/ramaputhra",
+  "fundingUrl": "https://buymeacoffee.com/ramaputhra",
+  "isDesktopOnly": false
+}
