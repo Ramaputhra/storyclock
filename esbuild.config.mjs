@@ -1,6 +1,6 @@
 import esbuild from 'esbuild';
-import process from 'process';
-import builtins from 'builtin-modules';
+import process from 'node:process';
+import { builtinModules } from 'node:module';
 
 const banner = `/* Story Clock — Circle Map for Obsidian */`;
 
@@ -24,7 +24,8 @@ const context = await esbuild.context({
     '@lezer/common',
     '@lezer/highlight',
     '@lezer/lr',
-    ...builtins,
+    ...builtinModules,
+    ...builtinModules.map((m) => `node:${m}`),
   ],
   format: 'cjs',
   target: 'es2018',

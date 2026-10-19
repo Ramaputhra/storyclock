@@ -5,12 +5,13 @@ on:
     tags:
       - "*"
 
-permissions:
-  contents: write
-
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
     steps:
       - uses: actions/checkout@v4
 
@@ -19,22 +20,29 @@ jobs:
         with:
           node-version: "20.x"
 
-      - name: Build
-        id: build
+      - name: Build plugin
         run: |
           npm install
           npm run build
-          mkdir story-clock
-          cp main.js manifest.json styles.css story-clock/
-          zip -r story-clock.zip story-clock/
 
-      - name: Create Release
-        uses: ncipollo/release-action@v1
+      - name: Generate artifact attestation
+        uses: actions/attest@v4
         with:
-          artifacts: "main.js,manifest.json,styles.css,story-clock.zip"
-          tag: ${{ github.ref_name }}
-          name: ${{ github.ref_name }}
-          body: "Release ${{ github.ref_name }}"
-          draft: false
-          allowUpdates: true
-          token: ${{ secrets.GITHUB_TOKEN }}
+          subject-path: |
+            main.js
+            manifest.json
+            styles.css
+
+      - name: Create release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          tag="${GITHUB_REF#refs/tags/}"
+          if gh release view "$tag" >/dev/null 2>&1; then
+            gh release upload "$tag" main.js manifest.json styles.css --clobber
+          else
+            gh release create "$tag" \
+              --title="$tag" \
+              --notes="Release $tag" \
+              main.js manifest.json styles.css
+          fi

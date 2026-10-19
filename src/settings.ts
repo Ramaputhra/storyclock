@@ -1,6 +1,6 @@
-// Plugin settings.
+// Plugin settings using Obsidian 1.13+ declarative settings API.
 
-import { App, PluginSettingTab, Setting } from 'obsidian';
+import { App, PluginSettingTab, SettingDefinitionItem } from 'obsidian';
 import type StoryClockPlugin from './main';
 
 export const BMC_URL = 'https://buymeacoffee.com/ramaputhra';
@@ -25,50 +25,65 @@ export class StoryClockSettingTab extends PluginSettingTab {
     this.plugin = plugin;
   }
 
-  display(): void {
-    const { containerEl } = this;
-    containerEl.empty();
+  getControlValue(key: string): unknown {
+    if (key === 'noteFolder') return this.plugin.settings.noteFolder;
+    if (key === 'openBehavior') return this.plugin.settings.openBehavior;
+    return undefined;
+  }
 
-    new Setting(containerEl)
-      .setName('Title-card folder')
-      .setDesc('Folder (relative to the vault) where new title-card notes are created.')
-      .addText((text) =>
-        text
-          .setPlaceholder('Story Clock')
-          .setValue(this.plugin.settings.noteFolder)
-          .onChange(async (value) => {
-            this.plugin.settings.noteFolder = value.trim();
-            await this.plugin.saveSettings();
-          }),
-      );
+  async setControlValue(key: string, value: unknown): Promise<void> {
+    if (key === 'noteFolder' && typeof value === 'string') {
+      this.plugin.settings.noteFolder = value.trim();
+      await this.plugin.saveSettings();
+    } else if (
+      key === 'openBehavior' &&
+      (value === 'side' || value === 'tab' || value === 'current')
+    ) {
+      this.plugin.settings.openBehavior = value;
+      await this.plugin.saveSettings();
+    }
+  }
 
-    new Setting(containerEl)
-      .setName('Open linked notes')
-      .setDesc('Where a note opens when you click a mapped segment.')
-      .addDropdown((dd) =>
-        dd
-          .addOption('side', 'Side panel (split)')
-          .addOption('tab', 'New tab')
-          .addOption('current', 'Current pane')
-          .setValue(this.plugin.settings.openBehavior)
-          .onChange(async (value) => {
-            this.plugin.settings.openBehavior = value as StoryClockSettings['openBehavior'];
-            await this.plugin.saveSettings();
-          }),
-      );
-
-    containerEl.createEl('hr');
-
-    new Setting(containerEl)
-      .setName('Support Story Clock')
-      .setDesc('If Story Clock helps your writing or plotting workflow, consider buying the author a coffee.')
-      .addButton((btn) =>
-        btn
-          .setButtonText('☕ Buy me a coffee')
-          .setCta()
-          .onClick(() => {
-            window.open(BMC_URL, '_blank', 'noopener,noreferrer');
-          }),
-      );
+  getSettingDefinitions(): SettingDefinitionItem[] {
+    return [
+      {
+        name: 'Title-card folder',
+        desc: 'Folder (relative to the vault) where new title-card notes are created.',
+        control: {
+          type: 'text',
+          key: 'noteFolder',
+          placeholder: 'Story Clock',
+          defaultValue: DEFAULT_SETTINGS.noteFolder,
+        },
+      },
+      {
+        name: 'Open linked notes',
+        desc: 'Where a note opens when you click a mapped segment.',
+        control: {
+          type: 'dropdown',
+          key: 'openBehavior',
+          defaultValue: DEFAULT_SETTINGS.openBehavior,
+          options: {
+            side: 'Side panel (split)',
+            tab: 'New tab',
+            current: 'Current pane',
+          },
+        },
+      },
+      {
+        name: 'Support Story Clock',
+        desc: 'If Story Clock helps your writing or plotting workflow, consider buying the author a coffee.',
+        render: (setting) => {
+          setting.addButton((btn) =>
+            btn
+              .setButtonText('Buy me a coffee')
+              .setCta()
+              .onClick(() => {
+                window.open(BMC_URL, '_blank', 'noopener,noreferrer');
+              }),
+          );
+        },
+      },
+    ];
   }
 }

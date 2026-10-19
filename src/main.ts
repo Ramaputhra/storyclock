@@ -6,18 +6,18 @@ import type { StoryClockSettings } from './settings';
 export default class StoryClockPlugin extends Plugin {
   settings: StoryClockSettings = { ...DEFAULT_SETTINGS };
 
-  async onload() {
+  async onload(): Promise<void> {
     await this.loadSettings();
 
     this.registerView(VIEW_TYPE, (leaf) => new StoryClockView(leaf, this));
 
-    this.addRibbonIcon('timer', 'Open Story Clock', () => {
+    this.addRibbonIcon('timer', 'Open circle map', () => {
       void this.activateView();
     });
 
     this.addCommand({
-      id: 'open-story-clock',
-      name: 'Open Story Clock',
+      id: 'open-circle-map',
+      name: 'Open circle map',
       callback: () => {
         void this.activateView();
       },
@@ -26,15 +26,16 @@ export default class StoryClockPlugin extends Plugin {
     this.addSettingTab(new StoryClockSettingTab(this.app, this));
   }
 
-  async loadSettings() {
-    this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+  async loadSettings(): Promise<void> {
+    const raw = (await this.loadData()) as Partial<StoryClockSettings> | null;
+    this.settings = Object.assign({}, DEFAULT_SETTINGS, raw ?? {});
   }
 
-  async saveSettings() {
+  async saveSettings(): Promise<void> {
     await this.saveData(this.settings);
   }
 
-  async activateView() {
+  async activateView(): Promise<void> {
     const { workspace } = this.app;
     let leaf = workspace.getLeavesOfType(VIEW_TYPE)[0];
     if (!leaf) {

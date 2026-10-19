@@ -43,7 +43,7 @@ type Mode = 'paint' | 'wire' | 'note';
 // ---------------------------------------------------------------------------
 
 function el(tag: string, attrs: Record<string, unknown> = {}, children: (Node | string)[] = []): HTMLElement {
-  const e = document.createElement(tag);
+  const e = createEl(tag as keyof HTMLElementTagNameMap);
   for (const [k, v] of Object.entries(attrs)) {
     if (v == null) continue;
     if (k === 'class') e.className = v as string;
@@ -51,19 +51,19 @@ function el(tag: string, attrs: Record<string, unknown> = {}, children: (Node | 
     else if (k === 'dataset') Object.assign(e.dataset, v);
     else if (k.startsWith('on') && typeof v === 'function') e.addEventListener(k.slice(2).toLowerCase(), v as EventListener);
     else if (k === 'value' || k === 'placeholder' || k === 'textContent' || k === 'type' || k === 'rows' || k === 'disabled' || k === 'title') (e as unknown as Record<string, unknown>)[k] = v;
-    else e.setAttribute(k, String(v));
+    else if (typeof v === 'string' || typeof v === 'number' || typeof v === 'boolean') e.setAttribute(k, String(v));
   }
   for (const c of children) if (c != null) e.append(typeof c === 'string' ? document.createTextNode(c) : c);
   return e;
 }
 
 function svgEl(tag: string, attrs: Record<string, unknown> = {}, children: SVGElement[] = []): SVGElement {
-  const e = document.createElementNS('http://www.w3.org/2000/svg', tag);
+  const e = createSvg(tag as keyof SVGElementTagNameMap);
   for (const [k, v] of Object.entries(attrs)) {
     if (v == null) continue;
     if (k === 'style' && typeof v === 'object') Object.assign(e.style, v);
     else if (k.startsWith('on') && typeof v === 'function') e.addEventListener(k.slice(2).toLowerCase(), v as EventListener);
-    else e.setAttribute(k, String(v));
+    else if (typeof v === 'string' || typeof v === 'number' || typeof v === 'boolean') e.setAttribute(k, String(v));
   }
   for (const c of children) if (c) e.append(c);
   return e;
@@ -117,7 +117,7 @@ export class StoryClockView extends ItemView {
   private drag: { type: 'paint' | 'wire'; circle?: 1 | 2; anchor?: number; fromId?: string; moved?: boolean } | null = null;
   private preview: { x: number; y: number } | null = null;
 
-  private saveTimer: ReturnType<typeof setTimeout> | null = null;
+  private saveTimer: number | null = null;
 
   private toolbarEl: HTMLElement | null = null;
   private panelEl: HTMLElement | null = null;
@@ -138,7 +138,7 @@ export class StoryClockView extends ItemView {
     return VIEW_TYPE;
   }
   getDisplayText(): string {
-    return 'Story Clock';
+    return 'Story clock';
   }
   getIcon(): string {
     return 'timer';
@@ -149,8 +149,8 @@ export class StoryClockView extends ItemView {
   }
 
   async onClose(): Promise<void> {
-    if (this.saveTimer) {
-      clearTimeout(this.saveTimer);
+    if (this.saveTimer !== null) {
+      window.clearTimeout(this.saveTimer);
       this.saveTimer = null;
     }
     if (this.project) {
@@ -161,8 +161,8 @@ export class StoryClockView extends ItemView {
   // ---- state helpers ------------------------------------------------------
 
   private scheduleSave(): void {
-    if (this.saveTimer) clearTimeout(this.saveTimer);
-    this.saveTimer = setTimeout(() => {
+    if (this.saveTimer !== null) window.clearTimeout(this.saveTimer);
+    this.saveTimer = window.setTimeout(() => {
       if (this.project) void saveProject(this.app, this.project);
     }, 500);
   }
@@ -486,8 +486,8 @@ export class StoryClockView extends ItemView {
 
   private backToList(): void {
     void (async () => {
-      if (this.saveTimer) {
-        clearTimeout(this.saveTimer);
+      if (this.saveTimer !== null) {
+        window.clearTimeout(this.saveTimer);
         this.saveTimer = null;
       }
       if (this.project) await saveProject(this.app, this.project);
@@ -1026,7 +1026,7 @@ export class StoryClockView extends ItemView {
     for (const mn of this.project?.minuteNotes ?? []) {
       const circle = mn.minute < 60 ? 1 : 2;
       const local = circle === 1 ? mn.minute : mn.minute - 60;
-      const ring = ringFor(circle as 1 | 2);
+      const ring = ringFor(circle);
       const pt = polarPoint(CX, CY, ring.outer - 2, local * DEG_PER_MINUTE);
       svg.appendChild(svgEl('circle', {
         cx: pt.x, cy: pt.y, r: 6,
